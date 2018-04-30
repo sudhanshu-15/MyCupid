@@ -28,11 +28,12 @@ task clean(type: Delete) {
 
 ext {
     compileSdkVersion = 27
-    minSdkVersion = 27
+    minSdkVersion = 25
     targetSdkVersion = 27
     supportLibrary = "27.1.1"
     retrofitVersion = "2.4.0"
     archCompVersion = "1.1.1"
     roomVersion = "1.0.0"
+    picassoVersion = "2.71828"
 
 }
