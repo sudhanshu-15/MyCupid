@@ -54,6 +54,14 @@ public class MatchPerson {
             this.basePath = basePath;
         }
 
+        public static String getBaseUrl() {
+            return baseUrl;
+        }
+
+        public String getImage() {
+            return baseUrl + basePath;
+        }
+
         @SerializedName("base_path")
         private String basePath;
 
