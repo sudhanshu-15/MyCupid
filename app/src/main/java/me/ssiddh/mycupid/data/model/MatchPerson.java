@@ -4,19 +4,21 @@ package me.ssiddh.mycupid.data.model;
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "matches")
 public class MatchPerson {
     @PrimaryKey
+    @NonNull
     private String userid;
     private String username;
     private int age;
     private int match;
     @SerializedName("state_code")
     private String stateCode;
-    @SerializedName("cityName")
+    @SerializedName("city_name")
     private String cityName;
     private Boolean liked;
     @Embedded
@@ -33,8 +35,25 @@ public class MatchPerson {
         this.photo = photo;
     }
 
+    public String getStateCode() {
+        return stateCode;
+    }
+
+    public void setStateCode(String stateCode) {
+        this.stateCode = stateCode;
+    }
+
     public static class Photo {
         private static final String baseUrl = "https://k2.okccdn.com/php/load_okc_image.php/images/";
+
+        public String getBasePath() {
+            return basePath;
+        }
+
+        public void setBasePath(String basePath) {
+            this.basePath = basePath;
+        }
+
         @SerializedName("base_path")
         private String basePath;
 
