@@ -19,12 +19,12 @@ import me.ssiddh.mycupid.data.model.MatchPerson;
 
 public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchViewHolder> {
 
-    List<MatchPerson> data = Collections.emptyList();
+    List<MatchPerson> personList = Collections.emptyList();
     LayoutInflater layoutInflater;
 
-    public MatchesAdapter(Context context, List<MatchPerson> data) {
+    public MatchesAdapter(Context context, List<MatchPerson> personList) {
         this.layoutInflater = LayoutInflater.from(context);
-        this.data = data;
+        this.personList = personList;
     }
 
     @NonNull
@@ -37,7 +37,7 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchVie
 
     @Override
     public void onBindViewHolder(@NonNull MatchesAdapter.MatchViewHolder holder, int position) {
-        MatchPerson current = data.get(position);
+        MatchPerson current = personList.get(position);
         holder.username.setText(current.getUsername());
         holder.ageLocation.setText(current.getAge() + " \u2022 " + current.getCityName() + ", " + current.getStateCode());
         holder.matchPercent.setText(current.getMatch()/100 + "%");
@@ -46,7 +46,15 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchVie
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return personList.size();
+    }
+
+    public List<MatchPerson> getPersonList() {
+        return personList;
+    }
+
+    public void setPersonList(List<MatchPerson> personList) {
+        this.personList = personList;
     }
 
     class MatchViewHolder extends RecyclerView.ViewHolder {

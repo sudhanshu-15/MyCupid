@@ -1,5 +1,7 @@
 package me.ssiddh.mycupid.ui;
 
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -15,11 +17,13 @@ import java.util.List;
 
 import me.ssiddh.mycupid.R;
 import me.ssiddh.mycupid.data.model.MatchPerson;
+import me.ssiddh.mycupid.viewmodel.SpecialFragmentViewModel;
 
 public class SpecialFragment extends Fragment{
 
     private RecyclerView specialRecyclerView;
     private MatchesAdapter matchesAdapter;
+    private SpecialFragmentViewModel viewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,6 +42,12 @@ public class SpecialFragment extends Fragment{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        viewModel = ViewModelProviders.of(this).get(SpecialFragmentViewModel.class);
+        viewModel.getSpecailBlendList().observe(this, specialList -> {
+            if (specialList != null){
+                matchesAdapter.setPersonList(specialList);
+            }
+        });
     }
 
     @Override
