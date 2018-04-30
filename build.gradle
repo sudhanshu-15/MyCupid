@@ -32,5 +32,7 @@ ext {
     targetSdkVersion = 27
     supportLibrary = "27.1.1"
     retrofitVersion = "2.4.0"
+    archCompVersion = "1.1.1"
+    roomVersion = "1.0.0"
 
 }

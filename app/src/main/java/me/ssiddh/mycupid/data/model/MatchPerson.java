@@ -1,34 +1,45 @@
 package me.ssiddh.mycupid.data.model;
 
 
-public class MatchPerson {
+import android.arch.persistence.room.Embedded;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 
+import com.google.gson.annotations.SerializedName;
+
+@Entity(tableName = "matches")
+public class MatchPerson {
+    @PrimaryKey
     private String userid;
     private String username;
     private int age;
     private int match;
-    private String state_code;
-    private String city_name;
+    @SerializedName("state_code")
+    private String stateCode;
+    @SerializedName("cityName")
+    private String cityName;
     private Boolean liked;
+    @Embedded
     private Photo photo;
 
-    public MatchPerson(String userid, String username, int age, int match, String state_code, String city_name, Boolean liked, Photo photo) {
+    public MatchPerson(String userid, String username, int age, int match, String stateCode, String cityName, Boolean liked, Photo photo) {
         this.userid = userid;
         this.username = username;
         this.age = age;
         this.match = match;
-        this.state_code = state_code;
-        this.city_name = city_name;
+        this.stateCode = stateCode;
+        this.cityName = cityName;
         this.liked = liked;
         this.photo = photo;
     }
 
     public static class Photo {
         private static final String baseUrl = "https://k2.okccdn.com/php/load_okc_image.php/images/";
-        private String base_path;
+        @SerializedName("base_path")
+        private String basePath;
 
-        public Photo(String base_path) {
-            this.base_path = base_path;
+        public Photo(String basePath) {
+            this.basePath = basePath;
         }
     }
 
@@ -64,20 +75,12 @@ public class MatchPerson {
         this.match = match;
     }
 
-    public String getState_code() {
-        return state_code;
+    public String getCityName() {
+        return cityName;
     }
 
-    public void setState_code(String state_code) {
-        this.state_code = state_code;
-    }
-
-    public String getCity_name() {
-        return city_name;
-    }
-
-    public void setCity_name(String city_name) {
-        this.city_name = city_name;
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
     public Boolean getLiked() {
