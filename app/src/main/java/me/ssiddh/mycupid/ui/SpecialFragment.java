@@ -8,23 +8,24 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.inject.Inject;
 
 import me.ssiddh.mycupid.R;
-import me.ssiddh.mycupid.data.model.MatchPerson;
+import me.ssiddh.mycupid.di.Injectable;
 import me.ssiddh.mycupid.viewmodel.SpecialFragmentViewModel;
 
-public class SpecialFragment extends Fragment{
+public class SpecialFragment extends Fragment implements Injectable{
 
     private RecyclerView specialRecyclerView;
     private MatchesAdapter matchesAdapter;
     private SpecialFragmentViewModel viewModel;
+
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,8 +46,8 @@ public class SpecialFragment extends Fragment{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(SpecialFragmentViewModel.class);
-        viewModel.getSpecailBlendList().observe(this, specialList -> {
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(SpecialFragmentViewModel.class);
+        viewModel.getSpecialBlendList().observe(this, specialList -> {
             matchesAdapter.setPersonList(specialList);
         });
     }

@@ -37,7 +37,7 @@ public class MatchedFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 //        viewModel = ViewModelProviders.of(this).get(SpecialFragmentViewModel.class);
-//        viewModel.getSpecailBlendList().observe(this, specialList -> {
+//        viewModel.getSpecialBlendList().observe(this, specialList -> {
 //            Log.d("Fragment", "onActivityCreated: This works");
 //            for(MatchPerson p : specialList){
 //                Log.d("Fragment", "onActivityCreated: " + p.getUserid());
