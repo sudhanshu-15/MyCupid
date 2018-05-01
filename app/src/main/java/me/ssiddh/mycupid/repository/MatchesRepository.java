@@ -2,11 +2,16 @@ package me.ssiddh.mycupid.repository;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.content.Context;
 import android.util.Log;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import me.ssiddh.mycupid.api.MyCupidService;
+import me.ssiddh.mycupid.data.db.MatchesDao;
+import me.ssiddh.mycupid.data.db.MyCupidDatabase;
 import me.ssiddh.mycupid.data.model.Data;
 import me.ssiddh.mycupid.data.model.MatchPerson;
 import retrofit2.Call;
@@ -19,20 +24,20 @@ public class MatchesRepository {
 
     private MyCupidService webservice;
     private static MatchesRepository matchesRepository;
+    private MatchesDao matchesDao;
 
-    public MatchesRepository() {
-        Retrofit retrofit = initalizeRetrofit();
-        webservice = retrofit.create(MyCupidService.class);
+    public MatchesRepository(MyCupidService myCupidService) {
+        this.webservice = myCupidService;
     }
 
-    public synchronized static MatchesRepository getInstance() {
-        if(matchesRepository == null) {
-            if (matchesRepository == null) {
-                matchesRepository = new MatchesRepository();
-            }
-        }
-        return matchesRepository;
-    }
+//    public synchronized static MatchesRepository getInstance() {
+//        if(matchesRepository == null) {
+//            if (matchesRepository == null) {
+//                matchesRepository = new MatchesRepository();
+//            }
+//        }
+//        return matchesRepository;
+//    }
 
     public LiveData<List<MatchPerson>> getPeopleList() {
         final MutableLiveData<List<MatchPerson>> data = new MutableLiveData<>();
