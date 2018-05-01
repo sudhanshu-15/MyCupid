@@ -33,15 +33,6 @@ public class MatchesRepository {
         this.webservice = myCupidService;
     }
 
-//    public synchronized static MatchesRepository getInstance() {
-//        if(matchesRepository == null) {
-//            if (matchesRepository == null) {
-//                matchesRepository = new MatchesRepository();
-//            }
-//        }
-//        return matchesRepository;
-//    }
-
     public LiveData<List<MatchPerson>> getPeopleList() {
         final MutableLiveData<List<MatchPerson>> data = new MutableLiveData<>();
         webservice.getMatches().enqueue(new Callback<Data>() {
@@ -58,14 +49,6 @@ public class MatchesRepository {
         });
         return data;
 
-    }
-
-    private Retrofit initalizeRetrofit() {
-        Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(MyCupidService.BASE_URL)
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-        return retrofit;
     }
 
 }

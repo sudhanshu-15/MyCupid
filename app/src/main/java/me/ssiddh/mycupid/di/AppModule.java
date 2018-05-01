@@ -4,6 +4,9 @@ import android.app.Application;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.persistence.room.Room;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -34,6 +37,11 @@ class AppModule {
     @Singleton @Provides
     MatchesDao provideMatchesDao(MyCupidDatabase db) {
         return db.matchesDao();
+    }
+
+    @Provides
+    Executor provideExecutor() {
+        return Executors.newSingleThreadExecutor();
     }
 
     @Singleton

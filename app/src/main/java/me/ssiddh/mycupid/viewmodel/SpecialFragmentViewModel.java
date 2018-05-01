@@ -19,9 +19,6 @@ public class SpecialFragmentViewModel  extends AndroidViewModel {
     @Inject
     public SpecialFragmentViewModel(MatchesRepository repository, Application application) {
         super(application);
-//        specialBlendList = MatchesRepository.getInstance().getPeopleList();
-//        MatchesRepositoryComponent matchesRepositoryComponent = DaggerMatchesRepositoryComponent.builder().build();
-//        MatchesRepository matchesRepository = matchesRepositoryComponent.getMatchesRepository();
         specialBlendList = repository.getPeopleList();
     }
 
