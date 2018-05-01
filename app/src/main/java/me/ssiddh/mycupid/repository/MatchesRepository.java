@@ -8,6 +8,7 @@ import android.util.Log;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import me.ssiddh.mycupid.api.MyCupidService;
 import me.ssiddh.mycupid.data.db.MatchesDao;
@@ -20,13 +21,15 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+@Singleton
 public class MatchesRepository {
 
     private MyCupidService webservice;
     private static MatchesRepository matchesRepository;
     private MatchesDao matchesDao;
 
-    public MatchesRepository(MyCupidService myCupidService) {
+    @Inject
+    public MatchesRepository(MyCupidService myCupidService, MatchesDao matchesDao) {
         this.webservice = myCupidService;
     }
 
