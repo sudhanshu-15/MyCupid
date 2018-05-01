@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,9 @@ public class SpecialFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.special_fragment, container, false);
         specialRecyclerView = rootView.findViewById(R.id.recyclerView);
-        setupData();
+        matchesAdapter = new MatchesAdapter(getActivity());
+        specialRecyclerView.setAdapter(matchesAdapter);
+        specialRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         return rootView;
     }
 
@@ -44,9 +47,7 @@ public class SpecialFragment extends Fragment{
         super.onActivityCreated(savedInstanceState);
         viewModel = ViewModelProviders.of(this).get(SpecialFragmentViewModel.class);
         viewModel.getSpecailBlendList().observe(this, specialList -> {
-            if (specialList != null){
-                matchesAdapter.setPersonList(specialList);
-            }
+            matchesAdapter.setPersonList(specialList);
         });
     }
 
@@ -64,17 +65,4 @@ public class SpecialFragment extends Fragment{
     public void onAttach(Context context) {
         super.onAttach(context);
     }
-
-    private void setupData() {
-        List<MatchPerson> matchList = new ArrayList<>();
-        MatchPerson.Photo photo = new MatchPerson.Photo("36x36/684x684/2/15743311334557165678.jpg");
-        MatchPerson p1 = new MatchPerson("5592586755333955055", "bklyn2356", 27, 8715, "NY", "Brooklyn", false, photo);
-        matchList.add(p1);
-        matchList.add(p1);
-        matchList.add(p1);
-        matchesAdapter = new MatchesAdapter(getActivity(), matchList);
-        specialRecyclerView.setAdapter(matchesAdapter);
-        specialRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-    }
-
 }

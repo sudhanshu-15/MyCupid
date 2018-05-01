@@ -3,6 +3,7 @@ package me.ssiddh.mycupid.ui;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +20,11 @@ import me.ssiddh.mycupid.data.model.MatchPerson;
 
 public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchViewHolder> {
 
-    List<MatchPerson> personList = Collections.emptyList();
+    List<MatchPerson> personList;
     LayoutInflater layoutInflater;
 
-    public MatchesAdapter(Context context, List<MatchPerson> personList) {
+    public MatchesAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
-        this.personList = personList;
     }
 
     @NonNull
@@ -46,7 +46,7 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchVie
 
     @Override
     public int getItemCount() {
-        return personList.size();
+        return personList == null ? 0 : personList.size();
     }
 
     public List<MatchPerson> getPersonList() {
@@ -54,7 +54,10 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchVie
     }
 
     public void setPersonList(List<MatchPerson> personList) {
-        this.personList = personList;
+        if (this.personList == null) {
+            this.personList = personList;
+            notifyItemRangeInserted(0, personList.size());
+        }
     }
 
     class MatchViewHolder extends RecyclerView.ViewHolder {

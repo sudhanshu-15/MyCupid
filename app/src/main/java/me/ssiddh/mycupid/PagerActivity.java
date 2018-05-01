@@ -35,29 +35,5 @@ public class PagerActivity extends AppCompatActivity {
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout = (TabLayout) findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
-
-        Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(MyCupidService.BASE_URL)
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-
-        MyCupidService service = retrofit.create(MyCupidService.class);
-
-        service.getMatches().enqueue(new Callback<Data>() {
-            @Override
-            public void onResponse(Call<Data> call, Response<Data> response) {
-                List<MatchPerson> data = response.body().getData();
-                for(MatchPerson p : data){
-                    Log.d("Resp", "onResponse: " + p.getUsername());
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<Data> call, Throwable t) {
-                Log.d("Response", "onFailure: " + t);
-            }
-        });
-
     }
 }
