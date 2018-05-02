@@ -20,6 +20,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
 import me.ssiddh.mycupid.R;
 import me.ssiddh.mycupid.data.model.MatchPerson;
 
@@ -28,6 +30,8 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchVie
     List<MatchPerson> personList;
     LayoutInflater layoutInflater;
     private static ClickListener clickListener;
+    @Inject
+    public Picasso picasso;
 
     public interface ClickListener {
         void onItemClicked(View view, int pos);
@@ -39,7 +43,7 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchVie
 
     public MatchesAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
-        setHasStableIds(true);
+//        setHasStableIds(true);
     }
 
     @NonNull
@@ -56,7 +60,7 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchVie
         holder.username.setText(current.getUsername());
         holder.ageLocation.setText(current.getAge() + " \u2022 " + current.getCityName() + ", " + current.getStateCode());
         holder.matchPercent.setText(current.getMatch()/100 + "%");
-        Picasso.get().load(current.getPhoto().getImage()).into(holder.picture);
+        picasso.get().load(current.getPhoto().getImage()).into(holder.picture);
         if(current.getLiked()){
             holder.cardView.setBackgroundColor(Color.parseColor("#F8BBD0"));
         }else {
@@ -96,14 +100,22 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchVie
 
                 @Override
                 public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                    return MatchesAdapter.this.personList.get(oldItemPosition).getUserid() == personList.get(newItemPosition).getUserid();
+                    boolean isSame = MatchesAdapter.this.personList.get(oldItemPosition).getLiked() == personList.get(newItemPosition).getLiked();
+                    Log.d("DiffUtil", "areItemsTheSame: " + isSame);
+                    return isSame;
                 }
 
                 @Override
                 public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
                     MatchPerson person = personList.get(newItemPosition);
-                    MatchPerson old = personList.get(oldItemPosition);
-                    return person.getUserid() == old.getUserid() && Objects.equals(person.getUsername(), old.getUsername());
+                    MatchPerson old = MatchesAdapter.this.personList.get(oldItemPosition);
+                    Log.d("DiffUtil", "areContentsTheSame: old " + old.getId());
+                    Log.d("DiffUtil", "areContentsTheSame: new " + person.getId());
+                    Log.d("DiffUtil", "areContentsTheSame: old liked " + old.getLiked());
+                    Log.d("DiffUtil", "areContentsTheSame: new liked" + person.getLiked());
+                    boolean isContentSame = person.getId() == old.getId() && person.getLiked() == old.getLiked();
+                    Log.d("DiffUtil", "areContentsTheSame: " + isContentSame);
+                    return isContentSame;
                 }
             });
             this.personList = personList;
@@ -133,6 +145,7 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchVie
         public void onClick(View view) {
             int position = getAdapterPosition();
             Log.d("Inside Holder", "onClick: " + position);
+            view.findViewById(R.id.singleCard).setBackgroundColor(Color.parseColor("#F8BBD0"));
             clickListener.onItemClicked(view, position);
         }
     }
