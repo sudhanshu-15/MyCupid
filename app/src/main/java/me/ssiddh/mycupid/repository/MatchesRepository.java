@@ -46,6 +46,10 @@ public class MatchesRepository {
 
     }
 
+    public LiveData<List<MatchPerson>> getMatchedList() {
+        return matchesDao.getTopMatched();
+    }
+
     public void updatePerson(MatchPerson person) {
         executor.execute(() -> {
             matchesDao.updateLiked(person);
