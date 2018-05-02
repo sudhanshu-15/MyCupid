@@ -1,13 +1,16 @@
 package me.ssiddh.mycupid.ui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,9 +27,19 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchVie
 
     List<MatchPerson> personList;
     LayoutInflater layoutInflater;
+    private static ClickListener clickListener;
+
+    public interface ClickListener {
+        void onItemClicked(View view, int pos);
+    }
+
+    public void setOnItemClickListener(ClickListener listener) {
+        clickListener = listener;
+    }
 
     public MatchesAdapter(Context context) {
         this.layoutInflater = LayoutInflater.from(context);
+        setHasStableIds(true);
     }
 
     @NonNull
@@ -44,6 +57,16 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchVie
         holder.ageLocation.setText(current.getAge() + " \u2022 " + current.getCityName() + ", " + current.getStateCode());
         holder.matchPercent.setText(current.getMatch()/100 + "%");
         Picasso.get().load(current.getPhoto().getImage()).into(holder.picture);
+        if(current.getLiked()){
+            holder.cardView.setBackgroundColor(Color.parseColor("#F8BBD0"));
+        }else {
+            holder.cardView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        }
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return personList.get(position).getId();
     }
 
     @Override
@@ -88,19 +111,29 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchVie
         }
     }
 
-    class MatchViewHolder extends RecyclerView.ViewHolder {
+    class MatchViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView username;
         TextView ageLocation;
         ImageView picture;
         TextView matchPercent;
+        CardView cardView;
 
         public MatchViewHolder(View itemView) {
             super(itemView);
+            cardView = itemView.findViewById(R.id.singleCard);
             username = itemView.findViewById(R.id.username);
             ageLocation = itemView.findViewById(R.id.agelocation);
             picture = itemView.findViewById(R.id.matchImage);
             matchPercent = itemView.findViewById(R.id.matchpercent);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            Log.d("Inside Holder", "onClick: " + position);
+            clickListener.onItemClicked(view, position);
         }
     }
 }
