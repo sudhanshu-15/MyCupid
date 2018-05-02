@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import me.ssiddh.mycupid.MyCupidApplication;
 import me.ssiddh.mycupid.R;
 import me.ssiddh.mycupid.di.Injectable;
 import me.ssiddh.mycupid.viewmodel.MatchedFragmentViewModel;
@@ -64,6 +65,7 @@ public class MatchedFragment extends Fragment implements Injectable {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        MyCupidApplication.getRefWatcher(getActivity()).watch(this);
     }
 
     @Override

@@ -36,5 +36,6 @@ ext {
     roomVersion = "1.0.0"
     picassoVersion = "2.71828"
     daggerVersion = "2.15"
+    leakCanaryVersion = "1.5.4"
 
 }
