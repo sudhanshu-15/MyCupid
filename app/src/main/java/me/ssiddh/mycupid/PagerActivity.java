@@ -50,4 +50,10 @@ public class PagerActivity extends AppCompatActivity implements HasSupportFragme
     public DispatchingAndroidInjector<android.support.v4.app.Fragment> supportFragmentInjector() {
         return dispatchingAndroidInjector;
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MyCupidApplication.getRefWatcher(this).watch(this);
+    }
 }
