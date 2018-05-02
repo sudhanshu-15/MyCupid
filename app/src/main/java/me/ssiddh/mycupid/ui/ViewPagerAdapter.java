@@ -19,7 +19,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter{
                 fragment = new SpecialFragment();
                 break;
             case 1:
-                fragment = new SpecialFragment();
+                fragment = new MatchedFragment();
                 break;
             default:
                 fragment = null;
