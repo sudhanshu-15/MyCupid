@@ -15,14 +15,23 @@ import me.ssiddh.mycupid.repository.MatchesRepository;
 public class SpecialFragmentViewModel  extends AndroidViewModel {
 
     private LiveData<List<MatchPerson>> specialBlendList;
+    private MatchesRepository repository;
 
     @Inject
     public SpecialFragmentViewModel(MatchesRepository repository, Application application) {
         super(application);
+        this.repository = repository;
         specialBlendList = repository.getPeopleList();
     }
 
     public LiveData<List<MatchPerson>> getSpecialBlendList() {
         return specialBlendList;
+    }
+
+    public void updateLiked(int position) {
+        List<MatchPerson> temp = specialBlendList.getValue();
+        MatchPerson tempPerson = temp.get(position);
+        tempPerson.setLiked(true);
+        repository.updatePerson(tempPerson);
     }
 }

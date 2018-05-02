@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ import me.ssiddh.mycupid.viewmodel.SpecialFragmentViewModel;
 public class SpecialFragment extends Fragment implements Injectable{
 
     private RecyclerView specialRecyclerView;
-    private MatchesAdapter matchesAdapter;
+    private SpecialAdapter specialAdapter;
     private SpecialFragmentViewModel viewModel;
 
     @Inject
@@ -37,9 +38,13 @@ public class SpecialFragment extends Fragment implements Injectable{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.special_fragment, container, false);
         specialRecyclerView = rootView.findViewById(R.id.recyclerView);
-        matchesAdapter = new MatchesAdapter(getActivity());
-        specialRecyclerView.setAdapter(matchesAdapter);
+        specialAdapter = new SpecialAdapter(getActivity());
+        specialAdapter.setOnItemClickListener((view, pos) -> {
+            updateLiked(pos);
+        });
+        specialRecyclerView.setAdapter(specialAdapter);
         specialRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        ((SimpleItemAnimator) specialRecyclerView.getItemAnimator()).setChangeDuration(0);
         return rootView;
     }
 
@@ -48,7 +53,7 @@ public class SpecialFragment extends Fragment implements Injectable{
         super.onActivityCreated(savedInstanceState);
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(SpecialFragmentViewModel.class);
         viewModel.getSpecialBlendList().observe(this, specialList -> {
-            matchesAdapter.setPersonList(specialList);
+            specialAdapter.setPersonList(specialList);
         });
     }
 
@@ -65,5 +70,11 @@ public class SpecialFragment extends Fragment implements Injectable{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+    }
+
+    private void updateLiked(int position) {
+        if(viewModel != null){
+            viewModel.updateLiked(position);
+        }
     }
 }

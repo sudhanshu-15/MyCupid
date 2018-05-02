@@ -10,8 +10,9 @@ import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "matches")
 public class MatchPerson {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @NonNull
+    private int id;
     private String userid;
     private String username;
     private int age;
@@ -24,7 +25,8 @@ public class MatchPerson {
     @Embedded
     private Photo photo;
 
-    public MatchPerson(String userid, String username, int age, int match, String stateCode, String cityName, Boolean liked, Photo photo) {
+    public MatchPerson(int id ,String userid, String username, int age, int match, String stateCode, String cityName, Boolean liked, Photo photo) {
+        this.id = id;
         this.userid = userid;
         this.username = username;
         this.age = age;
@@ -33,6 +35,15 @@ public class MatchPerson {
         this.cityName = cityName;
         this.liked = liked;
         this.photo = photo;
+    }
+
+    @NonNull
+    public int getId() {
+        return id;
+    }
+
+    public void setId(@NonNull int id) {
+        this.id = id;
     }
 
     public String getStateCode() {
