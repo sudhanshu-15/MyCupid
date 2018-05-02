@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,8 +40,12 @@ public class SpecialFragment extends Fragment implements Injectable{
         View rootView = inflater.inflate(R.layout.special_fragment, container, false);
         specialRecyclerView = rootView.findViewById(R.id.recyclerView);
         matchesAdapter = new MatchesAdapter(getActivity());
+        matchesAdapter.setOnItemClickListener((view, pos) -> {
+            updateLiked(pos);
+        });
         specialRecyclerView.setAdapter(matchesAdapter);
         specialRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        ((SimpleItemAnimator) specialRecyclerView.getItemAnimator()).setChangeDuration(0);
         return rootView;
     }
 
@@ -66,5 +71,11 @@ public class SpecialFragment extends Fragment implements Injectable{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+    }
+
+    private void updateLiked(int position) {
+        if(viewModel != null){
+            viewModel.updateLiked(position);
+        }
     }
 }

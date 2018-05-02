@@ -9,7 +9,6 @@ import me.ssiddh.mycupid.data.model.MatchPerson;
 
 @Database(entities = {MatchPerson.class}, version = 1)
 public abstract class MyCupidDatabase extends RoomDatabase {
-
     abstract public MatchesDao matchesDao();
 
 }

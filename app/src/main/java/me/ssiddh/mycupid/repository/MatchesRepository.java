@@ -41,22 +41,15 @@ public class MatchesRepository {
     }
 
     public LiveData<List<MatchPerson>> getPeopleList() {
-//        final MutableLiveData<List<MatchPerson>> data = new MutableLiveData<>();
-//        webservice.getMatches().enqueue(new Callback<Data>() {
-//            @Override
-//            public void onResponse(Call<Data> call, Response<Data> response) {
-//                List<MatchPerson> personList = response.body().getData();
-//                data.setValue(personList);
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Data> call, Throwable t) {
-//
-//            }
-//        });
         fetchFromServer();
         return matchesDao.getAll();
 
+    }
+
+    public void updatePerson(MatchPerson person) {
+        executor.execute(() -> {
+            matchesDao.updateLiked(person);
+        });
     }
 
     private void fetchFromServer() {
@@ -84,5 +77,4 @@ public class MatchesRepository {
             }
         });
     }
-
 }
