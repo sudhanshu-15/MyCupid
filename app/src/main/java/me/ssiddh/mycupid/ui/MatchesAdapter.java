@@ -2,6 +2,7 @@ package me.ssiddh.mycupid.ui;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import me.ssiddh.mycupid.R;
 import me.ssiddh.mycupid.data.model.MatchPerson;
@@ -57,6 +59,32 @@ public class MatchesAdapter extends RecyclerView.Adapter<MatchesAdapter.MatchVie
         if (this.personList == null) {
             this.personList = personList;
             notifyItemRangeInserted(0, personList.size());
+        } else {
+            DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+                @Override
+                public int getOldListSize() {
+                    return MatchesAdapter.this.personList.size();
+                }
+
+                @Override
+                public int getNewListSize() {
+                    return personList.size();
+                }
+
+                @Override
+                public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                    return MatchesAdapter.this.personList.get(oldItemPosition).getUserid() == personList.get(newItemPosition).getUserid();
+                }
+
+                @Override
+                public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                    MatchPerson person = personList.get(newItemPosition);
+                    MatchPerson old = personList.get(oldItemPosition);
+                    return person.getUserid() == old.getUserid() && Objects.equals(person.getUsername(), old.getUsername());
+                }
+            });
+            this.personList = personList;
+            result.dispatchUpdatesTo(this);
         }
     }
 

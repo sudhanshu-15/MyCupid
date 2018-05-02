@@ -4,12 +4,15 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import me.ssiddh.mycupid.MyCupidApplication;
 import me.ssiddh.mycupid.api.MyCupidService;
 import me.ssiddh.mycupid.data.db.MatchesDao;
 import me.ssiddh.mycupid.data.db.MyCupidDatabase;
@@ -24,31 +27,62 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Singleton
 public class MatchesRepository {
 
-    private MyCupidService webservice;
-    private static MatchesRepository matchesRepository;
-    private MatchesDao matchesDao;
+    private final MyCupidService webservice;
+    private final MatchesDao matchesDao;
+    private final Executor executor;
+    private MutableLiveData<List<MatchPerson>> mPersonData;
 
     @Inject
-    public MatchesRepository(MyCupidService myCupidService, MatchesDao matchesDao) {
+    public MatchesRepository(MyCupidService myCupidService, MatchesDao matchesDao, Executor executor) {
         this.webservice = myCupidService;
+        this.matchesDao = matchesDao;
+        this.executor = executor;
+        mPersonData = new MutableLiveData<>();
     }
 
     public LiveData<List<MatchPerson>> getPeopleList() {
-        final MutableLiveData<List<MatchPerson>> data = new MutableLiveData<>();
-        webservice.getMatches().enqueue(new Callback<Data>() {
-            @Override
-            public void onResponse(Call<Data> call, Response<Data> response) {
-                List<MatchPerson> personList = response.body().getData();
-                data.setValue(personList);
-            }
+//        final MutableLiveData<List<MatchPerson>> data = new MutableLiveData<>();
+//        webservice.getMatches().enqueue(new Callback<Data>() {
+//            @Override
+//            public void onResponse(Call<Data> call, Response<Data> response) {
+//                List<MatchPerson> personList = response.body().getData();
+//                data.setValue(personList);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Data> call, Throwable t) {
+//
+//            }
+//        });
+        fetchFromServer();
+        return matchesDao.getAll();
 
-            @Override
-            public void onFailure(Call<Data> call, Throwable t) {
+    }
 
+    private void fetchFromServer() {
+        executor.execute(() -> {
+            int count = matchesDao.getCount();
+            Log.d("DB", "fetchFromServer: count " + count);
+            boolean matchesExist = (matchesDao.getCount() > 0);
+            Log.d("Matches Exist", "fetchFromServer: " + matchesExist);
+            if (!matchesExist) {
+                webservice.getMatches().enqueue(new Callback<Data>() {
+                    @Override
+                    public void onResponse(Call<Data> call, Response<Data> response) {
+                        executor.execute(() -> {
+                            List<MatchPerson> personList = response.body().getData();
+                            Log.d("Server Response", "onResponse: " + personList.size());
+                            matchesDao.insertAll(personList);
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Call<Data> call, Throwable t) {
+                        Log.d("ServerCall", "onFailure: " + t);
+                    }
+                });
             }
         });
-        return data;
-
     }
 
 }

@@ -1,5 +1,6 @@
 package me.ssiddh.mycupid.data.db;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -14,15 +15,18 @@ import me.ssiddh.mycupid.data.model.MatchPerson;
 public interface MatchesDao {
 
     @Query("SELECT * FROM matches")
-    List<MatchPerson> getAll();
+    LiveData<List<MatchPerson>> getAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(MatchPerson... matches);
+    void insertAll(List<MatchPerson> matches);
 
     @Delete
     void delete(MatchPerson match);
 
     @Query("SELECT * FROM matches WHERE liked ORDER BY `match` LIMIT 6")
-    List<MatchPerson> getTopMatched();
+    LiveData<List<MatchPerson>> getTopMatched();
+
+    @Query("SELECT COUNT(*) FROM matches")
+    int getCount();
 
 }
