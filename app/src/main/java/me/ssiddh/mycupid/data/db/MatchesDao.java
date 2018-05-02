@@ -24,7 +24,7 @@ public interface MatchesDao {
     @Delete
     void delete(MatchPerson match);
 
-    @Query("SELECT * FROM matches WHERE liked ORDER BY `match` LIMIT 6")
+    @Query("SELECT * FROM matches WHERE liked ORDER BY `match` DESC LIMIT 6")
     LiveData<List<MatchPerson>> getTopMatched();
 
     @Query("SELECT COUNT(*) FROM matches")

@@ -23,6 +23,7 @@ public class MyCupidViewModelFactory implements ViewModelProvider.Factory{
         creators = new ArrayMap<>();
 
         creators.put(SpecialFragmentViewModel.class, () -> viewModelSubComponent.specialFragmentViewModel());
+        creators.put(MatchedFragmentViewModel.class, () -> viewModelSubComponent.matchedFragmentViewModel());
     }
 
     @NonNull
