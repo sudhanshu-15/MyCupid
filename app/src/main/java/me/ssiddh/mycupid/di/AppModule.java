@@ -3,6 +3,9 @@ package me.ssiddh.mycupid.di;
 import android.app.Application;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.persistence.room.Room;
+import android.content.Context;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -42,6 +45,11 @@ class AppModule {
     @Provides
     Executor provideExecutor() {
         return Executors.newSingleThreadExecutor();
+    }
+
+    @Provides
+    Picasso providePicasso(Context context) {
+        return new Picasso.Builder(context).build();
     }
 
     @Singleton
