@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
+//MatchPerson model which contains data for each person
 @Entity(tableName = "matches")
 public class MatchPerson {
     @PrimaryKey(autoGenerate = true)

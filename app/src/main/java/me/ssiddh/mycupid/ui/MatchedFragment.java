@@ -48,6 +48,8 @@ public class MatchedFragment extends Fragment implements Injectable {
         return rootView;
     }
 
+    //Subscribe on data returned from repository, to constantly update UI
+    //Any changes in the data updates the RecyclerView adapter, which in-turn notifies UI to update
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

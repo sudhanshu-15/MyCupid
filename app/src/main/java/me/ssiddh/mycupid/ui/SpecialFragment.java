@@ -45,10 +45,11 @@ public class SpecialFragment extends Fragment implements Injectable{
         });
         specialRecyclerView.setAdapter(specialAdapter);
         specialRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        ((SimpleItemAnimator) specialRecyclerView.getItemAnimator()).setChangeDuration(0);
         return rootView;
     }
 
+    //Subscribe on data returned from repository, to constantly update UI
+    //Any changes in the data updates the RecyclerView adapter, which in-turn notifies UI to update
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
