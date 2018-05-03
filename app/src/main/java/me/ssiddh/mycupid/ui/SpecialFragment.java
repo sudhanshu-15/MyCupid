@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import javax.inject.Inject;
 import me.ssiddh.mycupid.MyCupidApplication;
 import me.ssiddh.mycupid.R;
 import me.ssiddh.mycupid.di.Injectable;
+import me.ssiddh.mycupid.util.ConnectionLiveData;
 import me.ssiddh.mycupid.viewmodel.SpecialFragmentViewModel;
 
 public class SpecialFragment extends Fragment implements Injectable{
@@ -28,6 +30,9 @@ public class SpecialFragment extends Fragment implements Injectable{
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+
+    @Inject
+    ConnectionLiveData connectionLiveData;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +61,11 @@ public class SpecialFragment extends Fragment implements Injectable{
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(SpecialFragmentViewModel.class);
         viewModel.getSpecialBlendList().observe(this, specialList -> {
             specialAdapter.setPersonList(specialList);
+        });
+        connectionLiveData.observe(this, connectionModel -> {
+            if(connectionModel.isConnected()) {
+                viewModel.refreshSpecialList();
+            }
         });
     }
 
