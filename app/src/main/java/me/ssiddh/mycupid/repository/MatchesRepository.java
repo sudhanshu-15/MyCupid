@@ -59,23 +59,23 @@ public class MatchesRepository {
     private void fetchFromServer() {
         executor.execute(() -> {
             int count = matchesDao.getCount();
-            Log.d("DB", "fetchFromServer: count " + count);
+//            Log.d("DB", "fetchFromServer: count " + count);
             boolean matchesExist = (matchesDao.getCount() > 0);
-            Log.d("Matches Exist", "fetchFromServer: " + matchesExist);
+//            Log.d("Matches Exist", "fetchFromServer: " + matchesExist);
             if (!matchesExist) {
                 webservice.getMatches().enqueue(new Callback<Data>() {
                     @Override
                     public void onResponse(Call<Data> call, Response<Data> response) {
                         executor.execute(() -> {
                             List<MatchPerson> personList = response.body().getData();
-                            Log.d("Server Response", "onResponse: " + personList.size());
+//                            Log.d("Server Response", "onResponse: " + personList.size());
                             matchesDao.insertAll(personList);
                         });
                     }
 
                     @Override
                     public void onFailure(Call<Data> call, Throwable t) {
-                        Log.d("ServerCall", "onFailure: " + t);
+//                        Log.d("ServerCall", "onFailure: " + t);
                     }
                 });
             }
