@@ -12,11 +12,13 @@ import javax.inject.Inject;
 import me.ssiddh.mycupid.data.model.MatchPerson;
 import me.ssiddh.mycupid.repository.MatchesRepository;
 
+//View Model from Matched Fragment (Match% Tab)
 public class MatchedFragmentViewModel extends AndroidViewModel {
 
     private LiveData<List<MatchPerson>> matchedList;
     private MatchesRepository repository;
 
+    //Get list of top matches from repository
     @Inject
     public MatchedFragmentViewModel(MatchesRepository repository, @NonNull Application application) {
         super(application);

@@ -24,6 +24,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+//Repository to fetch the matches from server and db
 @Singleton
 public class MatchesRepository {
 
@@ -40,35 +41,36 @@ public class MatchesRepository {
         mPersonData = new MutableLiveData<>();
     }
 
+    //Make server call and return data fetched from the DB
     public LiveData<List<MatchPerson>> getPeopleList() {
         fetchFromServer();
         return matchesDao.getAll();
 
     }
 
+    //Fetch top liked records from DB
     public LiveData<List<MatchPerson>> getMatchedList() {
         return matchesDao.getTopMatched();
     }
 
+    //Update MatchPerson record on the database
     public void updatePerson(MatchPerson person) {
         executor.execute(() -> {
             matchesDao.updateLiked(person);
         });
     }
 
+    //Check if database has records, if not fetch data from server and add those records to DB
     private void fetchFromServer() {
         executor.execute(() -> {
             int count = matchesDao.getCount();
-            Log.d("DB", "fetchFromServer: count " + count);
             boolean matchesExist = (matchesDao.getCount() > 0);
-            Log.d("Matches Exist", "fetchFromServer: " + matchesExist);
             if (!matchesExist) {
                 webservice.getMatches().enqueue(new Callback<Data>() {
                     @Override
                     public void onResponse(Call<Data> call, Response<Data> response) {
                         executor.execute(() -> {
                             List<MatchPerson> personList = response.body().getData();
-                            Log.d("Server Response", "onResponse: " + personList.size());
                             matchesDao.insertAll(personList);
                         });
                     }

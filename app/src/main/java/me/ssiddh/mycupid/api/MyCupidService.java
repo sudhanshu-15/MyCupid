@@ -9,8 +9,10 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface MyCupidService {
+    //Base Url for api call
     String BASE_URL = "https://www.okcupid.com/";
 
+    //Get call implementation
     @GET("matchSample.json")
     Call<Data> getMatches();
 
