@@ -26,7 +26,7 @@ public class MatchedAdapter extends RecyclerView.Adapter<MatchedAdapter.MatchVie
 
     List<MatchPerson> personList;
     LayoutInflater layoutInflater;
-    private static MatchedAdapter.ClickListener clickListener;
+    private MatchedAdapter.ClickListener clickListener;
     @Inject
     public Picasso picasso;
 
