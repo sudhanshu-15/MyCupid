@@ -5,4 +5,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="white">#FFF</color>
     <color name="liked">#F8BBD0</color>
+    <color name="error">#E53935</color>
+    <color name="internet">#43A047</color>
 </resources>

@@ -1,14 +1,20 @@
 package me.ssiddh.mycupid;
 
 import android.app.Fragment;
+import android.arch.lifecycle.Observer;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -19,6 +25,8 @@ import me.ssiddh.mycupid.api.MyCupidService;
 import me.ssiddh.mycupid.data.model.Data;
 import me.ssiddh.mycupid.data.model.MatchPerson;
 import me.ssiddh.mycupid.ui.ViewPagerAdapter;
+import me.ssiddh.mycupid.util.ConnectionLiveData;
+import me.ssiddh.mycupid.util.ConnectionModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,9 +38,13 @@ public class PagerActivity extends AppCompatActivity implements HasSupportFragme
     TabLayout tabLayout;
     ViewPager viewPager;
     ViewPagerAdapter viewPagerAdapter;
+    private Map<String, String> snackbarList = new HashMap<>();
 
     @Inject
     DispatchingAndroidInjector<android.support.v4.app.Fragment> dispatchingAndroidInjector;
+
+    @Inject
+    ConnectionLiveData connectionLiveData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +56,30 @@ public class PagerActivity extends AppCompatActivity implements HasSupportFragme
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout = (TabLayout) findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
+        connectionLiveData.observe(this, connectionModel -> {
+            Snackbar snackbar = Snackbar.make(viewPager, R.string.no_internet, Snackbar.LENGTH_LONG);
+            View snackBarView = snackbar.getView();
+            snackbar.addCallback(new Snackbar.Callback(){
+                @Override
+                public void onShown(Snackbar sb) {
+                    super.onShown(sb);
+                    snackbarList.put("snackbar", "visible");
+                }
+            });
+            if(connectionModel.isConnected() && snackbarList.containsKey("snackbar")) {
+                snackbar.dismiss();
+                snackBarView.setBackgroundColor(getColor(R.color.internet));
+                snackbar.setText(R.string.internet_ok);
+                snackbar.show();
+                snackbarList.remove("snackbar");
+            }else if(!connectionModel.isConnected()){
+                snackbar.dismiss();
+                snackBarView.setBackgroundColor(getColor(R.color.error));
+                snackbar.setText(R.string.no_internet);
+                snackbar.setDuration(Snackbar.LENGTH_INDEFINITE);
+                snackbar.show();
+            }
+        });
     }
 
     @Override

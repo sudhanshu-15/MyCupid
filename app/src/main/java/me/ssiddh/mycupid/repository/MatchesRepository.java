@@ -43,7 +43,6 @@ public class MatchesRepository {
 
     //Make server call and return data fetched from the DB
     public LiveData<List<MatchPerson>> getPeopleList() {
-        fetchFromServer();
         return matchesDao.getAll();
 
     }
@@ -61,7 +60,7 @@ public class MatchesRepository {
     }
 
     //Check if database has records, if not fetch data from server and add those records to DB
-    private void fetchFromServer() {
+    public void fetchFromServer() {
         executor.execute(() -> {
             int count = matchesDao.getCount();
             boolean matchesExist = (matchesDao.getCount() > 0);

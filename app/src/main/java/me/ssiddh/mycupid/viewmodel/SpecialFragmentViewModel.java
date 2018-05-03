@@ -30,6 +30,10 @@ public class SpecialFragmentViewModel  extends AndroidViewModel {
         return specialBlendList;
     }
 
+    public void refreshSpecialList() {
+        repository.fetchFromServer();
+    }
+
     //Calls updatePerson on the DB, finds the correct record and updates it on the DB
     //TODO update logic to make it better
     public void updateLiked(int position) {

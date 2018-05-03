@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MyCupid</string>
+    <string name="no_internet">Missing internet, don\'t worry cupid will wait</string>
+    <string name="internet_ok">You are back online! Hurray</string>
 </resources>
