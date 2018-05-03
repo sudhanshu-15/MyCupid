@@ -12,7 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -36,6 +38,7 @@ public class PagerActivity extends AppCompatActivity implements HasSupportFragme
     TabLayout tabLayout;
     ViewPager viewPager;
     ViewPagerAdapter viewPagerAdapter;
+    private Map<String, String> snackbarList = new HashMap<>();
 
     @Inject
     DispatchingAndroidInjector<android.support.v4.app.Fragment> dispatchingAndroidInjector;
@@ -56,12 +59,20 @@ public class PagerActivity extends AppCompatActivity implements HasSupportFragme
         connectionLiveData.observe(this, connectionModel -> {
             Snackbar snackbar = Snackbar.make(viewPager, R.string.no_internet, Snackbar.LENGTH_LONG);
             View snackBarView = snackbar.getView();
-            if(connectionModel.isConnected()) {
+            snackbar.addCallback(new Snackbar.Callback(){
+                @Override
+                public void onShown(Snackbar sb) {
+                    super.onShown(sb);
+                    snackbarList.put("snackbar", "visible");
+                }
+            });
+            if(connectionModel.isConnected() && snackbarList.containsKey("snackbar")) {
                 snackbar.dismiss();
                 snackBarView.setBackgroundColor(getColor(R.color.internet));
                 snackbar.setText(R.string.internet_ok);
                 snackbar.show();
-            }else if(!connectionModel.isConnected()) {
+                snackbarList.remove("snackbar");
+            }else if(!connectionModel.isConnected()){
                 snackbar.dismiss();
                 snackBarView.setBackgroundColor(getColor(R.color.error));
                 snackbar.setText(R.string.no_internet);
