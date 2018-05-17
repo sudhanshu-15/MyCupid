@@ -54,6 +54,7 @@ public class MatchedAdapter extends RecyclerView.Adapter<MatchedAdapter.MatchVie
     public void onBindViewHolder(@NonNull MatchedAdapter.MatchViewHolder holder, int position) {
         MatchPerson current = personList.get(position);
         holder.username.setText(current.getUsername());
+        holder.liked.setSelected(current.getLiked());
         holder.ageLocation.setText(current.getAge() + " \u2022 " + current.getCityName() + ", " + current.getStateCode());
         holder.matchPercent.setText(current.getMatch()/100 + "%");
         picasso.get().load(current.getPhoto().getImage()).into(holder.picture);
@@ -121,6 +122,7 @@ public class MatchedAdapter extends RecyclerView.Adapter<MatchedAdapter.MatchVie
         ImageView picture;
         TextView matchPercent;
         CardView cardView;
+        TextView liked;
 
         public MatchViewHolder(View itemView) {
             super(itemView);
@@ -129,6 +131,7 @@ public class MatchedAdapter extends RecyclerView.Adapter<MatchedAdapter.MatchVie
             ageLocation = itemView.findViewById(R.id.agelocation);
             picture = itemView.findViewById(R.id.matchImage);
             matchPercent = itemView.findViewById(R.id.matchpercent);
+            liked = itemView.findViewById(R.id.liked);
             itemView.setOnClickListener(this);
         }
 

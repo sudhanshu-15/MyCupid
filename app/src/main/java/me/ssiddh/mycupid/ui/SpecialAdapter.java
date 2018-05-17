@@ -54,6 +54,7 @@ public class SpecialAdapter extends RecyclerView.Adapter<SpecialAdapter.MatchVie
     public void onBindViewHolder(@NonNull SpecialAdapter.MatchViewHolder holder, int position) {
         MatchPerson current = personList.get(position);
         holder.username.setText(current.getUsername());
+        holder.liked.setSelected(current.getLiked());
         holder.ageLocation.setText(current.getAge() + " \u2022 " + current.getCityName() + ", " + current.getStateCode());
         holder.matchPercent.setText(current.getMatch()/100 + "%");
         picasso.get().load(current.getPhoto().getImage()).into(holder.picture);
@@ -125,6 +126,7 @@ public class SpecialAdapter extends RecyclerView.Adapter<SpecialAdapter.MatchVie
         TextView ageLocation;
         ImageView picture;
         TextView matchPercent;
+        TextView liked;
         CardView cardView;
 
         public MatchViewHolder(View itemView) {
@@ -134,6 +136,7 @@ public class SpecialAdapter extends RecyclerView.Adapter<SpecialAdapter.MatchVie
             ageLocation = itemView.findViewById(R.id.agelocation);
             picture = itemView.findViewById(R.id.matchImage);
             matchPercent = itemView.findViewById(R.id.matchpercent);
+            liked = itemView.findViewById(R.id.liked);
             itemView.setOnClickListener(this);
         }
 
@@ -142,6 +145,7 @@ public class SpecialAdapter extends RecyclerView.Adapter<SpecialAdapter.MatchVie
             int position = getAdapterPosition();
 //            Log.d("Inside Holder", "onClick: " + position);
             view.findViewById(R.id.singleCard).setBackgroundColor(Color.parseColor("#F8BBD0"));
+            liked.setSelected(true);
             clickListener.onItemClicked(view, position);
         }
     }
