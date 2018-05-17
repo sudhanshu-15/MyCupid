@@ -13,15 +13,15 @@ import me.ssiddh.mycupid.data.model.MatchPerson;
 import me.ssiddh.mycupid.repository.MatchesRepository;
 
 //View model for SpecialFragment (Special Tab)
-public class SpecialFragmentViewModel  extends AndroidViewModel {
+public class SpecialFragmentViewModel  extends ViewModel {
 
     private LiveData<List<MatchPerson>> specialBlendList;
     private MatchesRepository repository;
 
     //Gets list of matches from the repository
     @Inject
-    public SpecialFragmentViewModel(MatchesRepository repository, Application application) {
-        super(application);
+    public SpecialFragmentViewModel(MatchesRepository repository) {
+//        super(application);
         this.repository = repository;
         specialBlendList = repository.getPeopleList();
     }
